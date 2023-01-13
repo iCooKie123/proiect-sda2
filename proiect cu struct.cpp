@@ -59,7 +59,7 @@ void afisare_dupa_id(student *cap){
   }else if (verif_existenta(cap,id_dat)==false){
     cout<<"Studentul cu id-ul "<<id_dat<<" nu exista in lista!"<<endl;
   }
-  
+
   else{
     curent=cap;
     while(curent!=NULL){
@@ -79,20 +79,15 @@ void afisare_dupa_id(student *cap){
 }
 
 student* adaugare_student(student *cap){
-    student *curent;
+  student *curent;
   student *nou;
   int id_dat;
-  
-  
-    curent=cap;
+
     cout<<"Introduceti id-ul studentului: ";
     cin>>id_dat;
     if(verif_existenta(cap,id_dat)==true){
       cout<<"Studentul cu id-ul "<<id_dat<<" exista deja in lista!"<<endl<<endl;
     }else{
-        while(curent->next!=NULL){
-            curent=curent->next;
-        }
       nou=new student;
       nou->id=id_dat;
       cout<<"Introduceti prenumele studentului: ";
@@ -107,12 +102,21 @@ student* adaugare_student(student *cap){
       for(int i=0;i<4;i++){
         cin>>nou->nr_restante[i];
       }
-      nou->next=NULL;
-      curent->next=nou;
-    }
-  cout<<endl<<endl;
-  cap=curent;
-  return cap;
+       cout<<endl<<endl;
+    } //  a creat un nou element
+
+      if (cap==NULL)
+         cap = nou;
+      else
+        {
+           curent=cap;
+           while(curent->next!=NULL)
+               curent=curent->next;
+           // curent = ultimul element din lista
+            nou->next=NULL;
+            curent->next=nou;
+          }
+       return cap;
 }
 
 student* modificare_medie(student*cap){
@@ -174,14 +178,27 @@ student* stergere_student(student* cap){
     if(verif_existenta(cap,id_dat)==false){
       cout<<"Studentul cu id-ul "<<id_dat<<" nu exista in lista!"<<endl;
     }else{
-        while(curent->id!=id_dat){
-            aux=curent;
-            curent=curent->next;
+        if (cap->id == id_dat)
+        {
+            cap=cap->next;
         }
-        aux->next=curent->next;
-        delete curent;
+        else
+        {
+            aux=cap;
+            curent=cap->next;
+            if (curent != NULL)
+            {
+                while(curent->id!=id_dat)
+                 {
+                   aux=curent;
+                   curent=curent->next;
+                  }
+            }
+            // aux = precedentul elenetuluyi dede sters
+            // curent = elemntul de sters
+            aux->next=curent->next;
+        }
     }
-    cap=aux;
     return cap;
 }
 
@@ -202,7 +219,7 @@ student* modificare_nume(student* cap){
         cin>>nume_nou;
         strcpy(curent->nume,nume_nou);
     }
-    cap=curent;
+    //cap=curent;
     return cap;
 }
 
@@ -223,7 +240,7 @@ student* modificare_prenume(student* cap){
         cin>>prenume_nou;
         strcpy(curent->prenume,prenume_nou);
     }
-    cap=curent;
+    //cap=curent;
     return cap;
 }
 
